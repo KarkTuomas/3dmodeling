@@ -2,31 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>COACH 3D Model</title>
-  <script type="text/javascript" src="https://www.x3dom.org/download/dev/x3dom.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://www.x3dom.org/download/dev/x3dom.css"/>
+  <title>COACH 3D Model (.glb with Three.js)</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f7f7f7;
-      text-align: center;
-      padding: 20px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    x3d {
-      border: 1px solid #ccc;
-    }
+    body { margin: 0; background: #f0f0f0; overflow: hidden; }
+    canvas { display: block; }
   </style>
 </head>
 <body>
-  <h1>COACH – Kehityksen portaat 3D-mallina</h1>
-  <x3d width="800px" height="600px">
-    <scene>
-      <inline url="coachScene.x3d"></inline>
-    </scene>
-  </x3d>
-  <p>Malli on luotu Blenderillä ja viety X3D-muotoon. Jokainen kuutio kuvaa yhtä kehitysvaihetta.</p>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/controls/OrbitControls.js';
+    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/loaders/GLTFLoader.js';
+
+    // Scene setup
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf0f0f0);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(2, 2, 4);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Controls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    // Light
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 5, 5);
+    scene.add(light);
+
+    const ambient = new THREE.AmbientLight(0x404040);
+    scene.add(ambient);
+
+    // Load GLB
+    const loader = new GLTFLoader();
+    loader.load('coachScene.glb', function (gltf) {
+      scene.add(gltf.scene);
+    }, undefined, function (error) {
+      console.error('Virhe ladattaessa mallia:', error);
+    });
+
+    // Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Animate
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
 </body>
 </html>
