@@ -1,64 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>COACH 3D Model (.glb with Three.js)</title>
-  <style>
-    body { margin: 0; background: #f0f0f0; overflow: hidden; }
-    canvas { display: block; }
-  </style>
-</head>
-<body>
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js';
-    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/controls/OrbitControls.js';
-    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/loaders/GLTFLoader.js';
-
-    // Scene setup
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f0f0);
-
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.set(2, 2, 4);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-
-    // Light
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(5, 5, 5);
-    scene.add(light);
-
-    const ambient = new THREE.AmbientLight(0x404040);
-    scene.add(ambient);
-
-    // Load GLB
-    const loader = new GLTFLoader();
-    loader.load('coachScene.glb', function (gltf) {
-      scene.add(gltf.scene);
-    }, undefined, function (error) {
-      console.error('Virhe ladattaessa mallia:', error);
-    });
-
-    // Resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // Animate
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    animate();
-  </script>
-</body>
-</html>
+<iframe title="COACH 3D Model" 
+        frameborder="0" 
+        allowfullscreen 
+        mozallowfullscreen="true" 
+        webkitallowfullscreen="true" 
+        width="800" 
+        height="600" 
+        src="https://sketchfab.com/3d-models/step-of-coaching-c0e4af5d30c4442c8da1b45e9f0202c1/embed">
+</iframe>
